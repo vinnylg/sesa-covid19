@@ -108,10 +108,14 @@ class CasosConfirmados:
         print(f"\nentão, de {len(casos_raw)} casos baixados hoje  {len(casos_raw)-len(index_duplicados)} serão adicionados\n")
         casos_raw = casos_raw.drop(index=index_duplicados)
 
-        casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] = casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'uf_resid']
+        casos_raw = casos_raw.loc[casos_raw['rs'].notnull()]
+        # casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] = casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'uf_resid']
         casos_raw['data_com'] = date.today()
 
+        black_list = ['PAULO ROBERTO DA SILVA','ANTONIO GOMES','PEDRO RAFAEL','MARIA ROSA DAMASCENO']
+
         novos_casos = casos_raw[['id','paciente','sexo','idade','mun_resid', 'mun_atend', 'rs', 'nome_exame','data_liberacao','data_com','data_1o_sintomas','hash']]
+        novos_casos = novos_casos.loc[~novos_casos['paciente'].isin(black_list)]
         novos_casos.to_excel(join('output','novos_casos.xlsx'), index=False)
 
         return novos_casos
@@ -137,11 +141,13 @@ class CasosConfirmados:
 
         print(f"obitos novos notifica {obitos_raw.shape[0]} + {obitos_curitiba.shape[0]} curitiba\n")
 
+        obitos_raw = obitos_raw.append(obitos_curitiba, ignore_index=True)
+
         dropar = obitos_raw.loc[obitos_raw['data_cura_obito'].isnull()]
         print(f"obitos novos com data no futuro: {dropar.shape[0]}")
         dropar.to_excel(join(self.errorspath,'obitos_sem_data.xlsx'))
 
-        obitos_raw = obitos_raw.append(obitos_curitiba, ignore_index=True)
+#        obitos_raw.to_excel('obitos_raw.xlsx')
 
         dropar = obitos_raw.loc[obitos_raw['data_cura_obito'] > datetime.today()]
         print(f"obitos novos com data no futuro: {dropar.shape[0]}")
@@ -191,10 +197,13 @@ class CasosConfirmados:
         print(f"\nentão, de {len(obitos_raw) - len(obitos_curitiba) + len(obitos_raw_duplicates)} obitos baixados hoje + {len(obitos_curitiba)} inseridos de Curitiba, ",end='')
         obitos_raw = obitos_raw.drop(index=index_duplicados)
 
-        obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] = obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'uf_resid']
+        obitos_raw = obitos_raw.loc[obitos_raw['rs'].notnull()]
+        # obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] = obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'uf_resid']
+        black_list = ['PAULO ROBERTO DA SILVA','ANTONIO GOMES','PEDRO RAFAEL','MARIA ROSA DAMASCENO']
 
         print(f"{len(obitos_raw) - len(obitos_raw.loc[obitos_raw['hash'].isin(obitos_curitiba['hash'])])} do notifica e {len(obitos_raw.loc[obitos_raw['hash'].isin(obitos_curitiba['hash'])])} de Curitiba serão adicionados\n")
         novos_obitos = obitos_raw[['id','paciente','sexo','idade','mun_resid', 'rs', 'data_cura_obito','hash']]
+        novos_obitos = novos_obitos.loc[~novos_obitos['paciente'].isin(black_list)]
         novos_obitos.to_excel(join('output','novos_obitos.xlsx'), index=False)
 
         return novos_obitos
