@@ -47,9 +47,9 @@ class Notifica:
     def download_todas_notificacoes(self):
         classificacao_final = ['0','1','2','3','5']
 
-        download_metabase(filename='null.csv',where=f"classificacao_final IS NULL")
+        download_metabase(filename='null.csv',where=f"classificacao_final IS NULL AND nt.metodo <> '' AND nt.metodo <> '3' AND nt.metodo IS NOT NULL AND nt.excluir_ficha = '2' AND nt.uf_residencia = '41' AND nt.uf_unidade_notifica = '41' AND (nt.status_notificacao = '1' OR nt.status_notificacao = '2')")
         for cf in classificacao_final:
-            download_metabase(filename=f"{cf}.csv",where=f"classificacao_final = {cf}")
+            download_metabase(filename=f"{cf}.csv",where=f"classificacao_final = {cf} AND nt.metodo <> '' AND nt.metodo <> '3' AND nt.metodo IS NOT NULL AND nt.excluir_ficha = '2' AND nt.uf_residencia = '41' AND nt.uf_unidade_notifica = '41' AND (nt.status_notificacao = '1' OR nt.status_notificacao = '2')")
 
 
 
@@ -57,41 +57,20 @@ class Notifica:
     def read_todas_notificacoes(self):
         classificacao_final = ['0','1','2','3','5']
 
-        self.read(join('input','queries','null.csv'))
+        self.read(join('input','queries_exames','null.csv'))
         for cf in classificacao_final:
-            self.read(join('input','queries',f"{cf}.csv"), append=True)
+            self.read(join('input','queries_exames',f"{cf}.csv"), append=True)
 
         self.save()
 
     #----------------------------------------------------------------------------------------------------------------------
     def read(self,pathfile,save=True,append=False):
         notifica = pd.read_csv(pathfile,
-                           dtype = {
-                               'id': int,
-                               'sexo': int
-                           },
-                           converters = {
-                               'paciente': normalize_text,
-                               'nome_mae': normalize_text,
-                               'cpf': normalize_cpf,
-                               'uf_residencia': lambda x: normalize_number(x, fill=99),
-                               'ibge_residencia': lambda x: normalize_number(x, fill=999999),
-                               'classificacao_final': lambda x: normalize_number(x, fill=0),
-                               'criterio_classificacao': lambda x: normalize_number(x, fill=4),
-                               'evolucao': lambda x: normalize_number(x, fill=3),
-                               'metodo': lambda x: normalize_number(x, fill=3),
-                               'exame': lambda x: normalize_number(x, fill=0),
-                               'resultado': lambda x: normalize_number(x, fill=0),
-                               'status_notificacao': lambda x: normalize_number(x, fill=0),
-                               'origem': lambda x: normalize_number(x,fill=0),
-                               'uf_unidade_notifica': lambda x: normalize_number(x,fill=99),
-                               'ibge_unidade_notifica': lambda x: normalize_number(x,fill=999999)
-                           },
-                           parse_dates = ['data_nascimento','data_1o_sintomas','data_cura_obito','data_coleta','data_recebimento','data_liberacao','data_notificacao','updated_at'],
+                           parse_dates = ['data_notificacao'],
                            date_parser = lambda x: pd.to_datetime(x, errors='coerce', format='%d/%m/%Y')
                         )
 
-        notifica = self.__normalize(notifica)
+        #notifica = self.__normalize(notifica)
 
         if save:
             if isinstance(self.__source, pd.DataFrame) and append:
