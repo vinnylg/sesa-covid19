@@ -26,7 +26,7 @@ def normalize_cpf(cpf):
 	return cpf[:3] + '.' + cpf[3:6] + '.' + cpf[6:9] + '-' + cpf[9:]
 
 def normalize_hash(text):
-	return "".join(filter(lambda x: x >= 'A' and x <= 'Z', str(text).upper()))
+	return "".join(filter(lambda x: x not in [' ','\n','\t','0','\\','/'], str(text).upper()))
 
 def data_hash(text):
 	return "".join(filter(lambda x: x >= '0' and x <= '9', str(text).upper()))

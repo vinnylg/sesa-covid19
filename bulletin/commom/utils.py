@@ -2,6 +2,8 @@ from time import time
 from datetime import date
 import pandas as pd
 import numpy as np
+from bulletin.commom.normalize import normalize_hash
+
 from xlsxwriter.worksheet import (
     Worksheet, cell_number_tuple, cell_string_tuple)
 
@@ -135,3 +137,30 @@ def set_column_autowidth(worksheet: Worksheet, column: int):
 def auto_fit_columns(wk,df):
     for i, _ in enumerate(df.columns):
         set_column_autowidth(wk,i)
+
+
+def compare_sheets(dfA: pd.DataFrame, dfB: pd.DataFrame):
+    dfA['hash'] = "".join([normalize_hash(dfA[col]) for col in dfA.columns])
+    dfB['hash'] = "".join([normalize_hash(dfB[col]) for col in dfB.columns])
+    A_in_B = dfA.loc[dfA['hash'].values.isin(dfB['hash'].values)]
+    A_not_B = dfA.loc[~dfA['hash'].values.isin(dfB['hash'].values)]
+    B_not_A = dfB.loc[~dfB['hash'].values.isin(dfA['hash'].values)]
+    
+    writer = pd.ExcelWriter("compare_sheets.xlsx",
+                        engine='xlsxwriter',
+                        datetime_format='dd/mm/yyyy',
+                        date_format='dd/mm/yyyy')
+
+    A_in_B.to_excel(writer,'A_in_B',index=None)
+    worksheet = writer.sheets['A_in_B']
+    auto_fit_columns(worksheet,A_in_B)
+
+    A_not_B.to_excel(writer,'A_not_B',index=None)
+    worksheet = writer.sheets['A_not_B']
+    auto_fit_columns(worksheet,A_not_B)
+
+    B_not_A.to_excel(writer,'B_not_A',index=None)
+    worksheet = writer.sheets['B_not_A']
+    auto_fit_columns(worksheet,B_not_A)
+
+    writer.save()
