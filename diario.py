@@ -30,7 +30,7 @@ notifica.shape()
 casos_confirmados = CasosConfirmados(force=force, hard=hard)
 casos_confirmados.shape()
 
-#notifica.filter_date(anteontem)
+notifica.filter_date(anteontem)
 
 notifica_novos_casos = notifica.get_casos()
 

@@ -108,14 +108,15 @@ class CasosConfirmados:
         print(f"\nentão, de {len(casos_raw)} casos baixados hoje  {len(casos_raw)-len(index_duplicados)} serão adicionados\n")
         casos_raw = casos_raw.drop(index=index_duplicados)
 
-        casos_raw = casos_raw.loc[casos_raw['rs'].notnull()]
-        # casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] = casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'uf_resid']
+        # casos_raw = casos_raw.loc[casos_raw['rs'].notnull()]
+        casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] = casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + casos_raw.loc[(casos_raw['rs'].isnull()) & (casos_raw['mun_resid'].notnull()), 'uf_resid']
         casos_raw['data_com'] = date.today()
 
-        black_list = ['PAULO ROBERTO DA SILVA','ANTONIO GOMES','PEDRO RAFAEL','MARIA ROSA DAMASCENO']
+        black_list = ['ADRIANA DA SILVA', 'ALBERTO TEIXEIRA LUIZ', 'ALDO CAVASOTTI', 'ANA PATRICIA CARRARO', 'ANDERSON FERREIRA CELESTINO', 'ANDRESSA DE LORENA PILANTIR', 'ANTONIO CARLOS DA SILVA', 'ANTONIO DE FREITAS', 'ANTONIO MARINHO DO NASCIMENTO', 'CARLOS PINHEIRO DE SOUZA', 'CLOCI ROCHA DA SILVA', 'DELURDES MARIA DA LUZ GARRETT', 'EDINEI KUBASKI', 'ELIANE JAQUELINE NICOLLI DOS SANTOS', 'ELOIR ROSA', 'EUNICE SANTOS PINHEIRO', 'GERALDO FRANCISCO BONFIM DE ALMEIDA', 'GIULIANNO CHEMIN SPREA', 'GUILHERME RUBINO BELLER', 'IZIDORO DRUZIK', 'JAIR DOS SANTOS OLIVEIRA', 'JAISON HUGO PACHECO', 'JOAO DE SOUZA BUENO', 'JOSE APARECIDO DE LIMA', 'JOSE AUGUSTO DE OLIVEIRA', 'JOSE LEOCADIO DE ALMEIDA', 'LEANDRO ANDRADE DA SILVA', 'LEVI LOPES', 'LUIZ DA SILVA', 'LUIZ FERNANDO NADAL JUNIOR', 'MARCOS ANDRE PODKOWA', 'MARCOS VINICIUS DIAS GONCALVES', 'MARIA APARECIDA FRANCISCO', 'MARIA CRISTINA DA LUZ CHAVES', 'MARIA IZAIRA CLAUDIO GUIMARAES MELLO', 'MARIA LUIZA DA SILVA', 'MATHEUS OLIVEIRA DE SOUSA', 'NELSON SKOVRON', 'OSCAR ESTEVAM DA SILVA', 'PAULO GOMES BARBOSA', 'RIVAEL PEDROSO', 'SEBASTIAO ALVES TEIXEIRA', 'SEBASTIAO BATISTA', 'SELVINO THIELE', 'THAIS MOTINHO DA SILVA', 'VERA LUCIA DOS SANTOS', 'WANDERLEIA WENTZ CUNICO', 'PAULO ROBERTO DA SILVA', 'ANTONIO GOMES', 'PEDRO RAFAEL', 'MARIA ROSA DAMASCENO', 'JOSE AGLACIR PEREIRA', 'MARIA JOSE DA SILVA', 'PAULO ROBERTO DA SILVA', 'ANTONIO GOMES', 'PEDRO RAFAEL', 'MARIA ROSA DAMASCENO', 'MARIA JOSE DA SILVA', 'ANA PATRICIA CARRARO', 'JOAO BATISTA DE ALMEIDA', 'TEREZA BATISTA SOARES','ADRIANO DOS SANTOS', 'ALCEU DOS SANTOS', 'ANDERSON DOS SANTOS TABORDA', 'ANDRESSA RIBEIRO', 'APARICIO ROSA', 'CLAIR MARLENE DA ROSA BOAVENTURA', 'GERSON DE JESUS GONCALVES PINHEIRO', 'GUILHERME GONCALVES LANDIN', 'HELENA MARIA DOS REIS', 'IVONE MARIA BOCCHI BARRETO', 'JORGE JOSE CORDEIRO', 'LUCIA PAULO DA SILVA FREITAS', 'MARCOS MARCELO MAZZUTTI', 'MARIA APARECIDA DA SILVA', 'MARIA DO SOCORRO SILVA', 'ORLANDO BARROS ESTEVES', 'OSVALDO DE OLIVEIRA', 'PEDRO CORREA BRIZOLA', 'REIZOLETE DOS SANTOS ROSSA', 'ROBERTO CESAR SANTANA RIBEIRO', 'ROBERVANE SANTANA', 'ROGERIO WAGNER SILVA', 'SEBASTIAO PINHEIRO', 'VALDEMIR DA SILVA','SALETE CRISTINA KANIA']
 
         novos_casos = casos_raw[['id','paciente','sexo','idade','mun_resid', 'mun_atend', 'rs', 'nome_exame','data_liberacao','data_com','data_1o_sintomas','hash']]
         novos_casos = novos_casos.loc[~novos_casos['paciente'].isin(black_list)]
+
         novos_casos.to_excel(join('output','novos_casos.xlsx'), index=False)
 
         return novos_casos
@@ -197,14 +198,16 @@ class CasosConfirmados:
         print(f"\nentão, de {len(obitos_raw) - len(obitos_curitiba) + len(obitos_raw_duplicates)} obitos baixados hoje + {len(obitos_curitiba)} inseridos de Curitiba, ",end='')
         obitos_raw = obitos_raw.drop(index=index_duplicados)
 
-        obitos_raw = obitos_raw.loc[obitos_raw['rs'].notnull()]
-        # obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] = obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'uf_resid']
-        black_list = ['PAULO ROBERTO DA SILVA','ANTONIO GOMES','PEDRO RAFAEL','MARIA ROSA DAMASCENO']
+        # obitos_raw = obitos_raw.loc[obitos_raw['rs'].notnull()]
+        obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] = obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'mun_resid'] + '/' + obitos_raw.loc[(obitos_raw['rs'].isnull()) & (obitos_raw['mun_resid'].notnull()), 'uf_resid']
+
+        black_list = ['ADRIANA DA SILVA', 'ALBERTO TEIXEIRA LUIZ', 'ALDO CAVASOTTI', 'ANA PATRICIA CARRARO', 'ANDERSON FERREIRA CELESTINO', 'ANDRESSA DE LORENA PILANTIR', 'ANTONIO CARLOS DA SILVA', 'ANTONIO DE FREITAS', 'ANTONIO MARINHO DO NASCIMENTO', 'CARLOS PINHEIRO DE SOUZA', 'CLOCI ROCHA DA SILVA', 'DELURDES MARIA DA LUZ GARRETT', 'EDINEI KUBASKI', 'ELIANE JAQUELINE NICOLLI DOS SANTOS', 'ELOIR ROSA', 'EUNICE SANTOS PINHEIRO', 'GERALDO FRANCISCO BONFIM DE ALMEIDA', 'GIULIANNO CHEMIN SPREA', 'GUILHERME RUBINO BELLER', 'IZIDORO DRUZIK', 'JAIR DOS SANTOS OLIVEIRA', 'JAISON HUGO PACHECO', 'JOAO DE SOUZA BUENO', 'JOSE APARECIDO DE LIMA', 'JOSE AUGUSTO DE OLIVEIRA', 'JOSE LEOCADIO DE ALMEIDA', 'LEANDRO ANDRADE DA SILVA', 'LEVI LOPES', 'LUIZ DA SILVA', 'LUIZ FERNANDO NADAL JUNIOR', 'MARCOS ANDRE PODKOWA', 'MARCOS VINICIUS DIAS GONCALVES', 'MARIA APARECIDA FRANCISCO', 'MARIA CRISTINA DA LUZ CHAVES', 'MARIA IZAIRA CLAUDIO GUIMARAES MELLO', 'MARIA LUIZA DA SILVA', 'MATHEUS OLIVEIRA DE SOUSA', 'NELSON SKOVRON', 'OSCAR ESTEVAM DA SILVA', 'PAULO GOMES BARBOSA', 'RIVAEL PEDROSO', 'SEBASTIAO ALVES TEIXEIRA', 'SEBASTIAO BATISTA', 'SELVINO THIELE', 'THAIS MOTINHO DA SILVA', 'VERA LUCIA DOS SANTOS', 'WANDERLEIA WENTZ CUNICO', 'PAULO ROBERTO DA SILVA', 'ANTONIO GOMES', 'PEDRO RAFAEL', 'MARIA ROSA DAMASCENO', 'JOSE AGLACIR PEREIRA', 'MARIA JOSE DA SILVA', 'PAULO ROBERTO DA SILVA', 'ANTONIO GOMES', 'PEDRO RAFAEL', 'MARIA ROSA DAMASCENO', 'MARIA JOSE DA SILVA', 'ANA PATRICIA CARRARO', 'JOAO BATISTA DE ALMEIDA', 'TEREZA BATISTA SOARES','ADRIANO DOS SANTOS', 'ALCEU DOS SANTOS', 'ANDERSON DOS SANTOS TABORDA', 'ANDRESSA RIBEIRO', 'APARICIO ROSA', 'CLAIR MARLENE DA ROSA BOAVENTURA', 'GERSON DE JESUS GONCALVES PINHEIRO', 'GUILHERME GONCALVES LANDIN', 'HELENA MARIA DOS REIS', 'IVONE MARIA BOCCHI BARRETO', 'JORGE JOSE CORDEIRO', 'LUCIA PAULO DA SILVA FREITAS', 'MARCOS MARCELO MAZZUTTI', 'MARIA APARECIDA DA SILVA', 'MARIA DO SOCORRO SILVA', 'ORLANDO BARROS ESTEVES', 'OSVALDO DE OLIVEIRA', 'PEDRO CORREA BRIZOLA', 'REIZOLETE DOS SANTOS ROSSA', 'ROBERTO CESAR SANTANA RIBEIRO', 'ROBERVANE SANTANA', 'ROGERIO WAGNER SILVA', 'SEBASTIAO PINHEIRO', 'VALDEMIR DA SILVA','SALETE CRISTINA KANIA']
 
         print(f"{len(obitos_raw) - len(obitos_raw.loc[obitos_raw['hash'].isin(obitos_curitiba['hash'])])} do notifica e {len(obitos_raw.loc[obitos_raw['hash'].isin(obitos_curitiba['hash'])])} de Curitiba serão adicionados\n")
         novos_obitos = obitos_raw[['id','paciente','sexo','idade','mun_resid', 'rs', 'data_cura_obito','hash']]
         novos_obitos = novos_obitos.loc[~novos_obitos['paciente'].isin(black_list)]
-        novos_obitos.to_excel(join('output','novos_obitos.xlsx'), index=False)
+
+        novos_obitos.to_excel(join('output','novos_obitos.xlsx'),index=False)
 
         return novos_obitos
 
@@ -239,9 +242,17 @@ class CasosConfirmados:
 
         today = datetime.today()
         ontem = today - timedelta(1)
-        data_retroativos = ontem - timedelta(1)
+        anteontem = ontem - timedelta(1)
+        data_retroativos = ontem - timedelta(14)
 
         retroativos = novos_casosPR.loc[(novos_casosPR['data_liberacao'] <= data_retroativos)].sort_values(by='data_liberacao')
+        last2weeks = novos_casosPR.loc[(novos_casosPR['data_liberacao'] > data_retroativos) & (novos_casosPR['data_liberacao'] <= anteontem)].sort_values(by='data_liberacao')
+        hoje = novos_casosPR.loc[(novos_casosPR['data_liberacao'] > anteontem)].sort_values(by='data_liberacao')
+
+        obitos_retroativos = novos_obitosPR.loc[(novos_obitosPR['data_cura_obito'] <= data_retroativos)].sort_values(by='data_cura_obito')
+        obitos_last2weeks = novos_obitosPR.loc[(novos_obitosPR['data_cura_obito'] > data_retroativos) & (novos_obitosPR['data_cura_obito'] <= anteontem)].sort_values(by='data_cura_obito')
+        obitos_hoje = novos_obitosPR.loc[(novos_obitosPR['data_cura_obito'] > anteontem)].sort_values(by='data_cura_obito')
+
 
         with codecs.open(join('output','relatorios',f"relatorio_{(today.strftime('%d/%m/%Y_%Hh').replace('/','_').replace(' ',''))}.txt"),"w","utf-8-sig") as relatorio:
             relatorio.write(f"{today.strftime('%d/%m/%Y')}\n")
@@ -270,31 +281,35 @@ class CasosConfirmados:
                relatorio.write(f"{row['sexo']}\t{row['idade']}\t{row['mun_resid_swap'] if row['rs'] else row['mun_resid_swap']}\t{row['rs'] if row['rs'] else '#N/D'}\t{row['data_cura_obito'].day}/{static.meses[row['data_cura_obito'].month-1]}/{row['data_cura_obito'].year}\n")
             relatorio.write('\n')
 
-            if len(retroativos) > 0:
+            if True:
 
-                relatorio.write(f"Total divulgados:\n")
-                relatorio.write(f"{len(novos_casosPR):,} novos casos residentes ".replace(',','.'))
+                #casos
+                relatorio.write(f"{len(novos_casosPR):,} novos casos residentes divulgados no PR.\n".replace(',','.'))
 
-                if len(novos_casosFora) > 0:
-                    relatorio.write(f"e {len(novos_casosFora):,} não residente{'s' if len(novos_casosFora) > 1 else ''} ".replace(',','.'))
-                relatorio.write(f"divulgados no PR.\n")
-
-                relatorio.write(f"{len(retroativos)} casos retroativos confirmados no período de {retroativos.iloc[0]['data_liberacao'].strftime('%d/%m/%Y')} à {retroativos.iloc[-1]['data_liberacao'].strftime('%d/%m/%Y')}.\n")
-                relatorio.write(f"{len(novos_casosPR.loc[(novos_casosPR['data_liberacao'] > data_retroativos)])} novos casos confirmados na data de hoje.\n\n")
+                relatorio.write(f"{len(retroativos):,} casos retroativos confirmados no período de {retroativos.iloc[0]['data_liberacao'].strftime('%d/%m/%Y')} à {retroativos.iloc[-1]['data_liberacao'].strftime('%d/%m/%Y')}.\n".replace(',','.'))
+                relatorio.write(f"{len(last2weeks):,} novos casos confirmados no período de {last2weeks.iloc[0]['data_liberacao'].strftime('%d/%m/%Y')} à {last2weeks.iloc[-1]['data_liberacao'].strftime('%d/%m/%Y')}.\n".replace(',','.'))
+                relatorio.write(f"{len(hoje):,} novos casos confirmados desde o ultimo informe.\n\n".replace(',','.'))
 
 
                 novos_casosPR['month'] = novos_casosPR.apply(lambda x: x['data_liberacao'].month, axis=1)
                 novos_casosPR['year'] = novos_casosPR.apply(lambda x: x['data_liberacao'].year, axis=1)
                 relatorio.write('Novos casos por meses:\n')
                 for group, value in novos_casosPR.groupby(by=['year','month']):
-                    relatorio.write(f"{static.meses[int(group[1])-1]}\{group[0]}: {len(value)}\n")
+                    relatorio.write(f"{static.meses[int(group[1])-1]}\\{group[0]}: {len(value)}\n")
                 relatorio.write('\n')
 
+                #obitos
+                relatorio.write(f"{len(novos_obitosPR):,} novos obitos residentes divulgados no PR.\n".replace(',','.'))
+
+                relatorio.write(f"{len(obitos_retroativos):,} obitos retroativos ocorridos no período de {obitos_retroativos.iloc[0]['data_cura_obito'].strftime('%d/%m/%Y')} à {obitos_retroativos.iloc[-1]['data_cura_obito'].strftime('%d/%m/%Y')}.\n".replace(',','.'))
+                relatorio.write(f"{len(obitos_last2weeks):,} novos obitos ocorridos no período de {obitos_last2weeks.iloc[0]['data_cura_obito'].strftime('%d/%m/%Y')} à {obitos_last2weeks.iloc[-1]['data_cura_obito'].strftime('%d/%m/%Y')}.\n".replace(',','.'))
+                relatorio.write(f"{len(obitos_hoje):,} novos obitos ocorridos desde o ultimo informe.\n\n".replace(',','.'))
+                
                 relatorio.write('Novos obitos por meses:\n')
                 novos_obitosPR['month'] = novos_obitosPR.apply(lambda x: x['data_cura_obito'].month, axis=1)
                 novos_obitosPR['year'] = novos_obitosPR.apply(lambda x: x['data_cura_obito'].year, axis=1)
                 for group, value in novos_obitosPR.groupby(by=['year','month']):
-                    relatorio.write(f"{static.meses[int(group[1])-1]}\{group[0]}: {len(value)}\n")
+                    relatorio.write(f"{static.meses[int(group[1])-1]}\\{group[0]}: {len(value)}\n")
                 relatorio.write('\n')
 
                 relatorio.write('Novos obitos por dia:\n')
@@ -315,7 +330,7 @@ class CasosConfirmados:
                 #print(dicionario)
                 
               
-                relatorio.write(f"\n MANDAR ESSE ÚLTIMO PARÁGRAFO PARA A COMUNICAÇÃO NO PRIVADO\nOs pacientes que foram a óbito residiam em: ")
+                relatorio.write(f"\nOs pacientes que foram a óbito residiam em: ")
                 for municip, obit in dict(dicionario).items():
                     if obit != 1:
                         relatorio.write(f"{municip} ({obit})")
