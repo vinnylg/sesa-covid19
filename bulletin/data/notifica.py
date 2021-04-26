@@ -14,7 +14,7 @@ import pandas as pd
 from bulletin import __file__ as __root__
 from bulletin.commom import static
 from bulletin.commom.utils import isvaliddate
-from bulletin.commom.normalize import normalize_text, normalize_number, normalize_hash, normalize_cpf, date_hash
+from bulletin.commom.normalize import normalize_text, normalize_number, normalize_hash
 from bulletin.metabase.request import download_metabase
 
 #----------------------------------------------------------------------------------------------------------------------
@@ -202,9 +202,9 @@ class Notifica:
         notifica.loc[notifica['mun_resid'].notnull() & (notifica['idade']!=-99), 'hash_resid'] = notifica.loc[notifica['mun_resid'].notnull()].apply(lambda row: parser(normalize_hash(row['paciente'])+str(row['idade'])+normalize_hash(row['mun_resid'])), axis=1)
         notifica.loc[notifica['mun_atend'].notnull() & (notifica['idade']!=-99), 'hash_atend'] = notifica.loc[notifica['mun_atend'].notnull()].apply(lambda row: parser(normalize_hash(row['paciente'])+str(row['idade'])+normalize_hash(row['mun_atend'])), axis=1)
         notifica.loc[ notifica['nome_mae'].notnull(), 'hash_mae'] = notifica.loc[ notifica['nome_mae'].notnull() ].apply(lambda row: parser(normalize_hash(row['paciente'])+normalize_hash(row['nome_mae'])), axis=1)
-        notifica.loc[ notifica['cpf'].notnull(), 'hash_cpf'] = notifica.loc[ notifica['cpf'].notnull() ].apply(lambda row: parser((row['cpf'])), axis=1)
-        notifica.loc[notifica['data_nascimento']!=pd.NaT, 'hash_nasc'] = notifica.loc[notifica['data_nascimento']!=pd.NaT].apply(lambda row: parser(normalize_hash(row['paciente'])+date_hash(row['data_nascimento'])), axis=1)
-        notifica['hash_diag'] = notifica.apply(lambda row: normalize_hash(row['paciente'])+date_hash(row['data_diagnostico']), axis=1)
+#         notifica.loc[ notifica['cpf'].notnull(), 'hash_cpf'] = notifica.loc[ notifica['cpf'].notnull() ].apply(lambda row: parser((row['cpf'])), axis=1)
+#         notifica.loc[notifica['data_nascimento']!=pd.NaT, 'hash_nasc'] = notifica.loc[notifica['data_nascimento']!=pd.NaT].apply(lambda row: parser(normalize_hash(row['paciente'])+date_hash(row['data_nascimento'])), axis=1)
+#         notifica['hash_diag'] = notifica.apply(lambda row: normalize_hash(row['paciente'])+date_hash(row['data_diagnostico']), axis=1)
 
         #Gera hash para identificar alterações nos id das fichas
         # notifica['checksum'] = notifica.apply(
