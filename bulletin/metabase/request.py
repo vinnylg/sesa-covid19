@@ -36,7 +36,7 @@ def download_metabase(filename=None, where='nt.metodo <> "" AND nt.metodo <> "3"
         'Origin':'https://metabase.saude.pr.gov.br',
         'Connection':'keep-alive',
         'Referer':'https://metabase.saude.pr.gov.br/question',
-        'Cookie':'metabase.SESSION=c13edfa7-567f-4b67-b26d-390d4af6738b',
+        'Cookie':'metabase.SESSION=6299eb45-1f24-451a-a988-dfb3bb2c5a20',
         'Upgrade-Insecure-Requests':'1'
     }
 
